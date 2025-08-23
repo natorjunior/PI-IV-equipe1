@@ -1,7 +1,5 @@
 # PI-IV-equipe1
 
-# PI-V_equipe1
-
 # 📌 Regras para Uso do Git e GitHub no Desenvolvimento
 
 ## ✅ 1. Siga um fluxo de trabalho definido, como **Git Flow**.
