@@ -1,6 +1,6 @@
 from flask import jsonify
 
-# Mock em memória
+# Mock temporário em memória
 usuarios = {}
 
 def register_user(data):
