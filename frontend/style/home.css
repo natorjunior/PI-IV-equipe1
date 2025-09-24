@@ -6,13 +6,13 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #F2F2F2;
+  background-color: #5e5d5d;
 }
 
 .topbar {
   width: 100%;
   height: 60px;
-  background: linear-gradient(to right, #CBA3E3, #F3C6D9, #F9E79F);
+  background: #5e5d5d;
   color: white;
   display: flex;
   align-items: center;
@@ -22,6 +22,7 @@ body {
   top: 0;
   left: 0;
   z-index: 1000;
+  border-bottom: 1px solid #a9a6a6;
 }
 
 .topbar h1 {
@@ -41,32 +42,29 @@ body {
   font-weight: bold;
 }
 
-.sidebar-esquerda,
-.sidebar-direita {
+.sidebar-esquerda{
   width: 250px;
   height: 100vh;
-  background: linear-gradient(to right, #CBA3E3, #F3C6D9, #F9E79F);
+  background: #5e5d5d;
   color: white;
   padding: 20px;
   position: fixed;
   top: 60px;
+  border-right: 1px solid #a9a6a6;
+  padding: 20px;
 }
 
 .sidebar-esquerda {
   left: 0;
 }
 
-.sidebar-direita {
-  right: 0;
-}
 
-.sidebar-esquerda h2,
-.sidebar-direita h2 {
+
+.sidebar-esquerda h2{
   margin-bottom: 20px;
 }
 
-.sidebar-esquerda ul,
-.sidebar-direita ul {
+.sidebar-esquerda ul{
   list-style: none;
 }
 
@@ -75,8 +73,7 @@ body {
   margin: 15px 0;
 }
 
-.sidebar-esquerda ul li a,
-.sidebar-direita ul li a {
+.sidebar-esquerda ul li a{
   color: white;
   text-decoration: none;
   font-weight: bold;
