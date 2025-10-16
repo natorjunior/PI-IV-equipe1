@@ -1,110 +1,96 @@
-let tasks = [];
+document.addEventListener('DOMContentLoaded', () => {
+    const feed = document.querySelector('.feed');
 
-function init(){
-    const storedTasks = localStorage.getItem(`todoTasks`);
-    if (storedTasks){
-        tasks = JSON.parse(storedTasks);
+    if (feed) {
+        feed.addEventListener('click', (event) => {
+            const button = event.target.closest('.action-btn, .btn-delete');
+
+            if (!button) return; 
+
+            const post = button.closest('.post');
+            if (!post) return;
+
+            if (button.classList.contains('action-btn')) {
+                const actionType = button.classList[1]; 
+
+                switch (actionType) {
+                    case 'like':
+                       
+                        button.classList.toggle('liked');
+
+                        let currentLikes = parseInt(button.textContent.match(/\d+/) || 0);
+                        
+                        if (button.classList.contains('liked')) {
+                            
+                            currentLikes++;
+                            button.innerHTML = `<i class="fas fa-heart"></i> ${currentLikes} Curtidas`;
+                            console.log('Post curtido!');
+                        } else {
+                            
+                            currentLikes = Math.max(0, currentLikes - 1);
+                            button.innerHTML = `<i class="fas fa-heart"></i> Curtir`;
+                            
+                            if (currentLikes > 0) {
+                                button.innerHTML = `<i class="fas fa-heart"></i> ${currentLikes} Curtidas`;
+                            }
+                            console.log('Curtida removida.');
+                        }
+                        break;
+
+                    case 'comment':
+                        alert(`Respondendo ao post: "${post.querySelector('p').textContent.substring(0, 30)}..."`);
+                        break;
+
+                    case 'repost':
+                        alert('Postagem repostada com sucesso!');
+                        break;
+
+                    case 'share':
+                        alert('Abrindo modal de compartilhamento...');
+                        break;
+                }
+            } 
+            
+            else if (button.classList.contains('btn-delete')) {
+                const isConfirmed = confirm('Tem certeza que deseja excluir esta postagem? Esta ação não pode ser desfeita.');
+                
+                if (isConfirmed) {
+                    // Remove o elemento postagem 
+                    post.remove();
+                    console.log('Postagem excluída com sucesso!');
+                }
+            }
+        });
     }
 
-    renderTasks(`all`);
+    const btnPublic = document.querySelector('.btn-room.public');
+    const btnPrivate = document.querySelector('.btn-room.private');
 
-    setupEventListeners();
-}
-
-function saveTasks(){
-    localStorage.setItem(`todoTasks`,JSON.stringify(tasks));
-}
-
-function addTask(title, description){
-    const newTask = {
-        id: Date.now(),
-        title: title,
-        description: description,
-        completed: false
-    };
-    tasks.push(newTask);
-    saveTasks();
-    renderTasks(document.querySelector('#filters .active').dataset.filter);
-}
-
-// 2. Listar Tarefas & Filtrar Tarefas
-function renderTasks(filterStatus) {
-    const taskList = document.getElementById('task-list');
-    taskList.innerHTML = ''; // Limpa a lista antes de renderizar
-
-    // Filtragem
-    let filteredTasks = tasks;
-    if (filterStatus === 'pending') {
-        filteredTasks = tasks.filter(task => !task.completed);
-    } else if (filterStatus === 'completed') {
-        filteredTasks = tasks.filter(task => task.completed);
+    if (btnPublic) {
+        btnPublic.addEventListener('click', () => {
+            alert('Aguardando Back-end: Abrindo formulário para criar uma Sala Pública...');
+        });
     }
 
-    // O loop forEach
-    filteredTasks.forEach(task => {
-        const listItem = document.createElement('li');
-        listItem.className = `task-item ${task.completed ? 'completed' : ''}`;
-        listItem.dataset.id = task.id;
-        
-        // (Título, Descrição, Toggle, Remover)
-        listItem.innerHTML = `
-            <div>
-                <h3>${task.title}</h3>
-                <p>${task.description}</p>
-            </div>
-            <div>
-                <button onclick="toggleTaskCompletion(${task.id})">
-                    ${task.completed ? 'Reativar' : 'Concluir'}
-                </button>
-                <button onclick="removeTask(${task.id})">Remover</button>
-            </div>
-        `;
-
-        taskList.appendChild(listItem);
-    });
-}
-
-// 3. Marcar como Concluída
-function toggleTaskCompletion(id) {
-    const taskIndex = tasks.findIndex(t => t.id === id);
-    if (taskIndex > -1) {
-        tasks[taskIndex].completed = !tasks[taskIndex].completed;
-        saveTasks();
-        renderTasks(document.querySelector('#filters .active').dataset.filter);
+    if (btnPrivate) {
+        btnPrivate.addEventListener('click', () => {
+            alert('Aguardando Back-end: Abrindo formulário para criar uma Sala Privada (com convites)...');
+        });
     }
-}
 
-// 4. Remover Tarefa 
-function removeTask(id) {
-    if (confirm('Tem certeza que deseja remover esta tarefa?')) {
-        tasks = tasks.filter(task => task.id !== id);
-        saveTasks();
-        renderTasks(document.querySelector('#filters .active').dataset.filter);
+    const postButton = document.querySelector('.btn-post');
+    const postTextarea = document.querySelector('.create-post textarea');
+
+    if (postButton) {
+        postButton.addEventListener('click', () => {
+            const content = postTextarea.value.trim();
+
+            if (content.length > 0) {
+                alert(`Postando: "${content.substring(0, 50)}..."\n(Esta postagem será visível após recarregar a página na versão real)`);
+                postTextarea.value = '';
+            } else {
+                alert('O conteúdo da postagem não pode estar vazio.');
+            }
+        });
     }
-}
-
-function setupEventListeners() {
-    document.getElementById('formulario-de-tarefa').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const title = document.getElementById('task-title').value.trim();
-        const description = document.getElementById('task-description').value.trim();
-        
-        if (title) { // Validação
-            addTask(title, description);
-            // Limpa formulário
-            this.reset();
-        }
-    });
-
-    //Botões de Filtro
-    document.getElementById('filters').addEventListener('click', function(e) {
-        if (e.target.tagName === 'BUTTON') {
-            document.querySelectorAll('#filters button').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
-            renderTasks(e.target.dataset.filter);
-        }
-    });
-}
-
-// Iniciar a aplicação
-document.addEventListener('DOMContentLoaded', init);
+});
