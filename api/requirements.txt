@@ -8,3 +8,4 @@ flask_sqlalchemy
 flask_cors
 pymysql
 werkzeug
+cryptography>=38.0
