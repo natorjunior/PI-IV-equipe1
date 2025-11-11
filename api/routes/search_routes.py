@@ -10,5 +10,11 @@ def buscar():
     postagens = Postagem.query.filter(Postagem.conteudo.contains(termo)).all()
     return jsonify({
         "usuarios": [u.nome_usuario for u in usuarios],
-        "postagens": [p.conteudo for p in postagens]
+        "postagens": [{
+            "id": p.id,
+            "conteudo": p.conteudo,
+            "imagem_url": p.imagem_url,
+            "curtidas": p.curtidas,
+            "usuario_id": p.usuario_id
+        } for p in postagens]
     })
