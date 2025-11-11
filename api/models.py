@@ -17,6 +17,7 @@ class Postagem(db.Model):
     __tablename__ = 'postagens'
     id = db.Column(db.Integer, primary_key=True)
     conteudo = db.Column(db.Text, nullable=False)
+    imagem_url = db.Column(db.String(500), nullable=True)  # URL da imagem (opcional)
     curtidas = db.Column(db.Integer, default=0)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     
