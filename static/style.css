@@ -12,7 +12,6 @@ body {
     color: #1c1e21;
 }
 
-
 .navbar {
     background-color: #ffffff;
     border-bottom: 1px solid #ddd;
@@ -51,7 +50,6 @@ body {
     border-radius: 0;
 }
 
-
 .container {
     max-width: 900px; 
     margin: 20px auto;
@@ -61,8 +59,7 @@ body {
     gap: 20px;
 }
 
-
-.criar-seção-de-conteudo {
+.criar-secao-conteudo {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 8px;
@@ -82,7 +79,7 @@ body {
     font-size: 16px;
 }
 
-.criar-post .actions {
+.criar-post .acoes { 
     display: flex;
     justify-content: flex-end;
 }
@@ -102,18 +99,17 @@ body {
     background-color: #0056b3;
 }
 
-
-.criar-sala h3 {
+.criar-sala h3 { 
     margin-bottom: 10px;
     color: #333;
 }
 
-.opcoes-sala {
+.opcoes-sala { 
     display: flex;
     gap: 10px;
 }
 
-.btn-room {
+.btn-sala {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
@@ -123,22 +119,21 @@ body {
     transition: background-color 0.2s;
 }
 
-.btn-room.public {
+.btn-sala.publico { 
     background-color: #28a745; 
     color: white;
     border-color: #28a745;
 }
 
-.btn-room.private {
+.btn-sala.privado { 
     background-color: #ffc107; 
     color: #333;
     border-color: #ffc107;
 }
 
-.btn-room:hover {
+.btn-sala:hover {
     opacity: 0.85;
 }
-
 
 .feed h2 {
     margin-bottom: 10px;
@@ -146,7 +141,7 @@ body {
     font-size: 20px;
 }
 
-.post {
+.postagem { 
     background-color: #ffffff;
     padding: 15px;
     border-radius: 8px;
@@ -155,7 +150,7 @@ body {
     border: 1px solid #e5e5e5;
 }
 
-.post-header {
+.cabecalho-post { 
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -170,18 +165,18 @@ body {
     object-fit: cover;
 }
 
-.user-info strong {
+.info-usuario strong { 
     display: block;
     font-size: 16px;
     color: #333;
 }
 
-.user-info .timestamp {
+.info-usuario .tempo { 
     font-size: 12px;
     color: #999;
 }
 
-.btn-delete {
+.btn-excluir { 
     position: absolute;
     top: 5px;
     right: 5px;
@@ -194,24 +189,24 @@ body {
     transition: color 0.2s;
 }
 
-.btn-delete:hover {
+.btn-excluir:hover {
     color: #a71d2a;
 }
 
-.post-content p {
+.conteudo-post p { 
     margin-bottom: 15px;
     line-height: 1.5;
     color: #333;
 }
 
-.post-actions {
+.acoes-post { 
     display: flex;
     justify-content: space-around;
     padding-top: 10px;
     border-top: 1px solid #eee;
 }
 
-.action-btn {
+.btn-acao { 
     background: none;
     border: none;
     color: #606770;
@@ -223,14 +218,14 @@ body {
     transition: background-color 0.2s, color 0.2s;
 }
 
-.action-btn i {
+.btn-acao i {
     margin-right: 5px;
 }
 
-.action-btn:hover {
+.btn-acao:hover {
     background-color: #f0f2f5;
 }
 
-.action-btn.like.liked {
+.btn-acao.curtir.curtido { 
     color: #dc3545; 
 }
