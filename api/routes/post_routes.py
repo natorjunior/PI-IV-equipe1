@@ -11,7 +11,7 @@ POSTS = [
         'username': 'Amigo_Tech',
         'content': 'Adorei o novo design! Estrutura modular é outro nível.',
         'timestamp': 'há 2 horas',
-        'avatar': 'https://via.placeholder.com/40/28a745/ffffff?text=A',
+        'avatar': 'https://iplaceholder.com/40x40/FF00FF/FFFFFF?text=A',
         'likes': 12,
         'can_delete': False,
         'liked': False
@@ -21,7 +21,7 @@ POSTS = [
         'username': 'Usuário Exemplo',
         'content': 'Olá, mundo! Testando a API na estrutura real.',
         'timestamp': 'há 5 minutos',
-        'avatar': 'https://via.placeholder.com/40/007bff/ffffff?text=U',
+        'avatar': 'https://iplaceholder.com/40x40/FF00FF/FFFFFF?text=U',
         'likes': 0,
         'can_delete': True,
         'liked': False
@@ -54,7 +54,7 @@ def create_post():
         'username': 'Usuário Logado', 
         'content': content,
         'timestamp': 'agora',
-        'avatar': 'https://via.placeholder.com/40/FF00FF/ffffff?text=L',
+        'avatar': 'https://iplaceholder.com/40x40/FF00FF/FFFFFF?text=L',
         'likes': 0,
         'can_delete': True,
         'liked': False
@@ -77,4 +77,5 @@ def delete_post(post_id):
     
     del POSTS[post_index]
     
+
     return '', 204
