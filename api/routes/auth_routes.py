@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify
-# Importa as funções de segurança do Werkzeug
 from werkzeug.security import check_password_hash 
 from models import Usuario
 

@@ -1,44 +1,81 @@
 from flask import Blueprint, request, jsonify
-from models import Postagem, Usuario
-from database import db
 
-post_bp = Blueprint("post", __name__)
+# Define o Blueprint. No app.py, ele deve ser registrado com url_prefix='/api/posts'
+post_bp = Blueprint('post_bp', __name__)
 
-@post_bp.route("/postar", methods=["POST"])
-def postar():
+# --- SIMULAÇÃO DE BANCO DE DADOS (Lista em memória) ---
+# Nota: Futuramente, você vai substituir isso pelas chamadas ao 'models.py' e 'database.py'
+POSTS = [
+    {
+        'id': 1,
+        'username': 'Amigo_Tech',
+        'content': 'Adorei o novo design! Estrutura modular é outro nível.',
+        'timestamp': 'há 2 horas',
+        'avatar': 'https://iplaceholder.com/40x40/FF00FF/FFFFFF?text=A',
+        'likes': 12,
+        'can_delete': False,
+        'liked': False
+    },
+    {
+        'id': 2,
+        'username': 'Usuário Exemplo',
+        'content': 'Olá, mundo! Testando a API na estrutura real.',
+        'timestamp': 'há 5 minutos',
+        'avatar': 'https://iplaceholder.com/40x40/FF00FF/FFFFFF?text=U',
+        'likes': 0,
+        'can_delete': True,
+        'liked': False
+    }
+]
+next_post_id = 3
+
+# ROTA GET: Pega todos os posts
+@post_bp.route('/', methods=['GET'])
+def get_posts():
+    return jsonify(POSTS)
+
+# ROTA POST: Cria novo post
+@post_bp.route('/', methods=['POST'])
+def create_post():
+    global next_post_id
+    global POSTS
+    
     data = request.get_json()
-    conteudo = data.get("conteudo")
-    usuario_id = data.get("usuario_id")
-    imagem_url = data.get("imagem_url")  # URL da imagem (opcional)
+    
+    if data is None:
+        return jsonify({'error': 'JSON inválido'}), 415 
 
-    if not conteudo or not usuario_id:
-        return jsonify({"message": "Conteúdo e usuário são obrigatórios"}), 400
+    content = data.get('content')
+    if not content or content.strip() == "":
+        return jsonify({'error': 'Conteúdo vazio'}), 400
 
-    usuario = Usuario.query.get(usuario_id)
-    if not usuario:
-        return jsonify({"message": "Usuário não encontrado"}), 404
+    new_post = {
+        'id': next_post_id,
+        'username': 'Usuário Logado', 
+        'content': content,
+        'timestamp': 'agora',
+        'avatar': 'https://iplaceholder.com/40x40/FF00FF/FFFFFF?text=L',
+        'likes': 0,
+        'can_delete': True,
+        'liked': False
+    }
+    
+    POSTS.insert(0, new_post)
+    next_post_id += 1
+    
+    return jsonify(new_post), 201
 
-    nova_postagem = Postagem(
-        conteudo=conteudo, 
-        usuario_id=usuario_id,
-        imagem_url=imagem_url
-    )
-    db.session.add(nova_postagem)
-    db.session.commit()
+# ROTA DELETE: Apaga post por ID
+@post_bp.route('/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    global POSTS
+    
+    post_index = next((i for i, post in enumerate(POSTS) if post['id'] == post_id), None)
+    
+    if post_index is None:
+        return jsonify({'error': 'Não encontrado'}), 404
+    
+    del POSTS[post_index]
+    
 
-    return jsonify({"message": "Postagem criada com sucesso!"}), 201
-
-@post_bp.route("/postagens", methods=["GET"])
-def listar_postagens():
-    """Lista todas as postagens"""
-    postagens = Postagem.query.all()
-    return jsonify({
-        "postagens": [{
-            "id": p.id,
-            "conteudo": p.conteudo,
-            "imagem_url": p.imagem_url,
-            "curtidas": p.curtidas,
-            "usuario_id": p.usuario_id,
-            "autor": p.autor.nome_usuario if p.autor else None
-        } for p in postagens]
-    }), 200
+    return '', 204
