@@ -1,6 +1,7 @@
 import os
 from flask import Flask, send_from_directory, render_template
 from flask_cors import CORS
+from werkzeug.middleware.proxy_fix import ProxyFix
 from database import db
 from routes.auth_routes import auth_bp
 from routes.user_routes import user_bp
@@ -8,6 +9,7 @@ from routes.home_routes import home_bp
 from routes.chat_routes import chat_bp
 from routes.post_routes import post_bp
 from routes.search_routes import search_bp
+
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
