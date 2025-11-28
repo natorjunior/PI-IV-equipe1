@@ -96,10 +96,27 @@ body {
 
 .criar-post .acoes { 
     display: flex;
+    gap: 10px;
+    align-items: center;
     justify-content: flex-end;
 }
 
 /* --- BOTÕES --- */
+.btn-imagem {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.2s;
+}
+
+.btn-imagem:hover {
+    background-color: #218838;
+}
+
 .btn-post {
     background-color: #007bff;
     color: white;
@@ -214,6 +231,17 @@ body {
     margin-bottom: 15px;
     line-height: 1.5;
     color: #333;
+}
+
+.conteudo-post img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: block;
 }
 
 .acoes-post { 

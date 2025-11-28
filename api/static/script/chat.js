@@ -1,26 +1,47 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const roomId = window.location.pathname.split('/').pop();
     const msgInput = document.getElementById('msg-input');
     const sendBtn = document.getElementById('btn-enviar');
     const chatBox = document.getElementById('chat-box');
 
+    // Verifica autenticação
+    try {
+        const authResponse = await fetch('/check-auth', {
+            credentials: 'include'
+        });
+        const authData = await authResponse.json();
+        
+        if (!authData.authenticated) {
+            alert("Você precisa fazer login primeiro!");
+            window.location.href = "/";    
+            return; 
+        }
+    } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+        alert("Erro ao verificar sessão. Faça login novamente.");
+        window.location.href = "/";
+        return;
+    }
 
     async function sendMessage() {
         const text = msgInput.value.trim();
-        // Pega o nome salvo no login
-        const nomeUsuario = localStorage.getItem("nome_usuario") || "Visitante"; 
 
         if (!text) return;
 
         try {
-            await fetch(`/api/chat/${roomId}/messages`, {
+            const response = await fetch(`/api/chat/${roomId}/messages`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    text: text,
-                    user: nomeUsuario
-                })
+                credentials: 'include', // Envia cookies de sessão
+                body: JSON.stringify({ text: text })
             });
+            
+            if (response.status === 401) {
+                alert("Sessão expirada. Faça login novamente.");
+                window.location.href = "/";
+                return;
+            }
+            
             msgInput.value = ''; 
             loadMessages(); 
         } catch (error) {
@@ -31,7 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Função para BUSCAR mensagens (Sem piscar)
     async function loadMessages() {
         try {
-            const res = await fetch(`/api/chat/${roomId}/messages`);
+            const res = await fetch(`/api/chat/${roomId}/messages`, {
+                credentials: 'include'
+            });
+            
+            if (res.status === 401) {
+                alert("Sessão expirada. Faça login novamente.");
+                window.location.href = "/";
+                return;
+            }
+            
             const messages = await res.json();
 
             // Truque: Só atualiza se o número de mensagens mudou

@@ -24,42 +24,25 @@
                     🌓
                 </button>
                 
-                <button onclick="localStorage.clear(); window.location.href='/';" style="background:none; border:none; cursor:pointer; font-size: 18px; color: red;" title="Sair">
+                <button onclick="logout()" style="background:none; border:none; cursor:pointer; font-size: 18px; color: red;" title="Sair">
                     <i class="fas fa-sign-out-alt"></i>
                 </button>
             </div>
         </nav>
     </header>
 
-    <script>
-        // 1. Carregar Nome
-        document.addEventListener("DOMContentLoaded", () => {
-            const nome = localStorage.getItem("nome_usuario") || "Usuário";
-            const displays = document.querySelectorAll(".nome-usuario-display");
-            displays.forEach(el => el.textContent = nome);
-
-            // 2. Aplicar Tema salvo ao carregar a página
-            const temaSalvo = localStorage.getItem("theme");
-            if (temaSalvo === "dark") {
-                document.body.classList.add("dark-mode");
-            }
-        });
-
-        // 3. Função para alternar tema (disponível globalmente)
-        function toggleTheme() {
-            document.body.classList.toggle("dark-mode");
-            const isDark = document.body.classList.contains("dark-mode");
-            localStorage.setItem("theme", isDark ? "dark" : "light");
-        }
-    </script>
-
     <main class="container">
         <section class="criar-secao-conteudo">   
             <div class="criar-post">
                 <textarea placeholder="O que está acontecendo?"></textarea>
                 <div class="acoes">
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                    <button class="btn-imagem" onclick="document.getElementById('image-input').click()">
+                        <i class="fas fa-image"></i>
+                    </button>
                     <button class="btn-post"><i class="fas fa-feather-alt"></i> Postar</button> 
                 </div>
+                <div id="image-preview" style="margin-top: 10px;"></div>
             </div>
         </section>
 

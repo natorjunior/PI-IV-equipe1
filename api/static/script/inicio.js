@@ -29,15 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch('/login', { 
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
+                    credentials: 'include', // IMPORTANTE: Envia cookies de sessão
                     body: JSON.stringify({ email, senha }),
                 });
 
                 const data = await response.json();
                 
                 if (response.ok) {
-                    localStorage.setItem("usuario_id", data.id);
-                    localStorage.setItem("nome_usuario", data.nome_usuario);
-                    
+                    // Não precisa mais salvar no localStorage
+                    // A sessão é gerenciada pelo servidor
                     window.location.href = "/home"; 
                 } else {
                     alert(data.message || "Erro ao fazer login");

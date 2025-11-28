@@ -1,6 +1,8 @@
 import os
 from flask import Flask, render_template
 from flask_cors import CORS
+from flask_login import LoginManager
+from flask_session import Session
 from database import db
 from routes.auth_routes import auth_bp
 from routes.user_routes import user_bp
@@ -10,7 +12,27 @@ from routes.post_routes import post_bp
 from routes.search_routes import search_bp
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
-CORS(app)
+
+# Configuração de segurança
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+
+# Configuração de uploads
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
+
+# Configuração de sessão
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+Session(app)
+
+# CORS configurado para aceitar credenciais
+CORS(app, supports_credentials=True, origins=['http://localhost:5001', 'http://127.0.0.1:5001'])
 
 
 db_uri = 'sqlite:///mentor.db'
@@ -34,10 +56,22 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
 
+# Configurar Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'auth.login'
+login_manager.session_protection = 'strong'
+
 try:
     from models import Usuario, Postagem, Mensagem
 except Exception as e:
     print(f"Aviso ao importar modelos: {e}")
+
+# User loader para Flask-Login
+@login_manager.user_loader
+def load_user(user_id):
+    from models import Usuario
+    return Usuario.query.get(int(user_id))
 
 with app.app_context():
     db.create_all()

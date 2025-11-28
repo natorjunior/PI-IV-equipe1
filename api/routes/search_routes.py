@@ -1,9 +1,11 @@
 from flask import Blueprint, request, jsonify
 from models import Usuario, Postagem
+from auth_utils import login_required_api
 
 search_bp = Blueprint('search', __name__)
 
 @search_bp.route("/buscar", methods=["GET"])
+@login_required_api
 def buscar():
     termo = request.args.get("q", "")
     usuarios = Usuario.query.filter(Usuario.nome_usuario.contains(termo)).all()
