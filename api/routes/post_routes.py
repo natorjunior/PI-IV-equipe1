@@ -16,6 +16,7 @@ def allowed_file(filename):
 
 # --- ROTA GET: Pega todos os posts ---
 @post_bp.route('/', methods=['GET'])
+@post_bp.route('', methods=['GET'], strict_slashes=False)
 @login_required_api
 def get_posts():
     posts_db = Postagem.query.order_by(Postagem.id.desc()).all()
@@ -44,6 +45,7 @@ def get_posts():
 
 # --- ROTA POST: Cria novo post ---
 @post_bp.route('/', methods=['POST'])
+@post_bp.route('', methods=['POST'], strict_slashes=False)
 @login_required_api
 def create_post():
     content = request.form.get('content')
@@ -86,6 +88,7 @@ def create_post():
 
 # --- ROTA DELETE ---
 @post_bp.route('/<int:post_id>', methods=['DELETE'])
+@post_bp.route('/<int:post_id>', methods=['DELETE'], strict_slashes=False)
 @login_required_api
 def delete_post(post_id):
     post = Postagem.query.get(post_id)
@@ -104,6 +107,7 @@ def delete_post(post_id):
 
 # --- ROTA CURTIR (CORRIGIDA) ---
 @post_bp.route('/<int:post_id>/like', methods=['POST'])
+@post_bp.route('/<int:post_id>/like', methods=['POST'], strict_slashes=False)
 @login_required_api
 def like_post(post_id):
     # Usa o usuário autenticado da sessão
