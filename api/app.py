@@ -28,11 +28,18 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = True  # exige HTTPS para enviar cookie
+app.config['PREFERRED_URL_SCHEME'] = 'https'
 
 Session(app)
 
 # CORS configurado para aceitar credenciais
-CORS(app, supports_credentials=True, origins=['http://localhost:5001', 'http://127.0.0.1:5001'])
+CORS(app, supports_credentials=True, origins=[
+    'http://localhost:5001',
+    'http://127.0.0.1:5001',
+    'https://mentor.acilab.com.br',
+    'http://mentor.acilab.com.br'
+])
 
 
 db_uri = 'sqlite:///mentor.db'
