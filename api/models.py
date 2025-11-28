@@ -1,5 +1,6 @@
 from database import db
 from datetime import datetime, timedelta # <--- ADICIONADO: timedelta
+from flask_login import UserMixin
 
 # Tabela de associação
 tabela_curtidas = db.Table('curtidas_assoc',
@@ -7,7 +8,7 @@ tabela_curtidas = db.Table('curtidas_assoc',
     db.Column('postagem_id', db.Integer, db.ForeignKey('postagens.id'), primary_key=True)
 )
 
-class Usuario(db.Model):
+class Usuario(UserMixin, db.Model):
     __tablename__ = 'usuarios'
     id = db.Column(db.Integer, primary_key=True)
     nome_usuario = db.Column(db.String(100), nullable=False)
@@ -15,6 +16,9 @@ class Usuario(db.Model):
     senha = db.Column(db.String(256), nullable=False)
     postagens = db.relationship('Postagem', backref='autor', lazy=True)
 
+    # Métodos necessários para Flask-Login (já fornecidos por UserMixin)
+    # is_authenticated, is_active, is_anonymous, get_id()
+    
     def __repr__(self):
         return f"<Usuario {self.nome_usuario}>"
 

@@ -1,12 +1,22 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
+from flask_login import current_user
 from models import Postagem, Usuario
 from database import db
 from datetime import datetime
+from auth_utils import login_required_api
+from werkzeug.utils import secure_filename
+import os
 
 post_bp = Blueprint('post_bp', __name__)
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 # --- ROTA GET: Pega todos os posts ---
 @post_bp.route('/', methods=['GET'])
+@login_required_api
 def get_posts():
     posts_db = Postagem.query.order_by(Postagem.id.desc()).all()
     
@@ -21,11 +31,12 @@ def get_posts():
             'id': p.id,
             'username': autor_nome,
             'content': p.conteudo if p.conteudo else "Conteúdo indisponível", 
+            'image_url': p.imagem_url,
             'timestamp': data_formatada,
             'avatar': "", 
-            'likes': p.curtidas, # Retorna o número físico salvo no banco
-            'can_delete': True,
-            # Cria uma lista com os nomes de quem curtiu para o JS saber se pinta de vermelho
+            'likes': p.curtidas,
+            # Só pode deletar se for o dono do post
+            'can_delete': (p.usuario_id == current_user.id),
             'liked_by': [u.nome_usuario for u in p.quem_curtiu] 
         })
         
@@ -33,28 +44,29 @@ def get_posts():
 
 # --- ROTA POST: Cria novo post ---
 @post_bp.route('/', methods=['POST'])
+@login_required_api
 def create_post():
-    data = request.get_json()
-    
-    content = data.get('content')
-    username = data.get('username')
+    content = request.form.get('content')
+    image_file = request.files.get('image')
 
     if not content:
         return jsonify({'error': 'Conteúdo vazio'}), 400
 
-    usuario = Usuario.query.filter_by(nome_usuario=username).first()
+    usuario = current_user
+    image_url = None
     
-    # Se não achar usuário (teste), usa ID 1 ou cria sem dono (cuidado)
-    if not usuario:
-        # Tenta pegar o primeiro usuário do banco como fallback
-        usuario = Usuario.query.first()
-        if not usuario:
-             return jsonify({'error': 'Nenhum usuário encontrado. Cadastre-se primeiro.'}), 400
+    # Se tem imagem, salva
+    if image_file and image_file.filename and allowed_file(image_file.filename):
+        filename = secure_filename(f"{usuario.id}_{datetime.now().timestamp()}_{image_file.filename}")
+        filepath = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+        image_file.save(filepath)
+        image_url = f"/static/uploads/{filename}"
     
     new_post = Postagem(
-        conteudo=content, # Usa o nome correto da coluna do models.py
+        conteudo=content,
         usuario_id=usuario.id,
-        curtidas=0 # Inicia com 0
+        imagem_url=image_url,
+        curtidas=0
     )
     
     db.session.add(new_post)
@@ -64,20 +76,26 @@ def create_post():
         'id': new_post.id,
         'username': usuario.nome_usuario,
         'content': new_post.conteudo,
+        'image_url': image_url,
         'timestamp': 'Agora',
         'avatar': '',
         'likes': 0,
         'can_delete': True,
-        'liked': False
+        'liked_by': []
     }), 201
 
 # --- ROTA DELETE ---
 @post_bp.route('/<int:post_id>', methods=['DELETE'])
+@login_required_api
 def delete_post(post_id):
     post = Postagem.query.get(post_id)
     
     if not post:
         return jsonify({'error': 'Não encontrado'}), 404
+    
+    # Verifica se o usuário é o dono do post
+    if post.usuario_id != current_user.id:
+        return jsonify({'error': 'Não autorizado'}), 403
     
     db.session.delete(post)
     db.session.commit()
@@ -86,32 +104,29 @@ def delete_post(post_id):
 
 # --- ROTA CURTIR (CORRIGIDA) ---
 @post_bp.route('/<int:post_id>/like', methods=['POST'])
+@login_required_api
 def like_post(post_id):
-    data = request.get_json()
-    username = data.get('username')
-
-    if not username:
-        return jsonify({'error': 'Usuário não identificado'}), 400
+    # Usa o usuário autenticado da sessão
+    usuario = current_user
 
     post = Postagem.query.get(post_id)
-    usuario = Usuario.query.filter_by(nome_usuario=username).first()
 
-    if not post or not usuario:
-        return jsonify({'error': 'Erro ao processar'}), 404
+    if not post:
+        return jsonify({'error': 'Post não encontrado'}), 404
     
-    # CORREÇÃO 2: Atualizar o contador físico E a relação
+    # Atualizar o contador físico E a relação
     if usuario in post.quem_curtiu:
-        post.quem_curtiu.remove(usuario) # Remove da lista de quem curtiu
-        post.curtidas = max(0, post.curtidas - 1) # Diminui o número (evita negativo)
+        post.quem_curtiu.remove(usuario)
+        post.curtidas = max(0, post.curtidas - 1)
         action = 'unliked'
     else:
-        post.quem_curtiu.append(usuario) # Adiciona na lista
-        post.curtidas += 1 # Aumenta o número
+        post.quem_curtiu.append(usuario)
+        post.curtidas += 1
         action = 'liked'
 
     db.session.commit()
     
     return jsonify({
-        'likes': post.curtidas, # Retorna o novo número atualizado
+        'likes': post.curtidas,
         'action': action
     }), 200

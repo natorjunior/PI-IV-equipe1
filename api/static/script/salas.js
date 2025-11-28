@@ -1,7 +1,26 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const formCriar = document.getElementById('form-criar-sala');
     const selectType = document.getElementById('room-type');
     const listaSalas = document.getElementById('lista-salas');
+
+    // Verifica autenticação
+    try {
+        const authResponse = await fetch('/check-auth', {
+            credentials: 'include'
+        });
+        const authData = await authResponse.json();
+        
+        if (!authData.authenticated) {
+            alert("Você precisa fazer login primeiro!");
+            window.location.href = "/";    
+            return; 
+        }
+    } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+        alert("Erro ao verificar sessão. Faça login novamente.");
+        window.location.href = "/";
+        return;
+    }
 
     // 1. Lógica da Tela de CRIAR SALA
     if (selectType) {
@@ -29,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await fetch('/api/rooms', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include', // Envia cookies de sessão
                     body: JSON.stringify({ name, objective, type, password })
                 });
 
@@ -52,7 +72,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadRooms() {
         try {
-            const res = await fetch('/api/rooms');
+            const res = await fetch('/api/rooms', {
+                credentials: 'include'
+            });
+            
+            if (res.status === 401) {
+                alert("Sessão expirada. Faça login novamente.");
+                window.location.href = "/";
+                return;
+            }
+            
             const rooms = await res.json();
             
             listaSalas.innerHTML = '';
@@ -97,8 +126,15 @@ async function tentarEntrar(id, type) {
         const res = await fetch('/api/rooms/join', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
+            credentials: 'include', // Envia cookies de sessão
             body: JSON.stringify({ room_id: id, password: password })
         });
+
+        if (res.status === 401) {
+            alert("Sessão expirada. Faça login novamente.");
+            window.location.href = "/";
+            return;
+        }
 
         const data = await res.json();
 

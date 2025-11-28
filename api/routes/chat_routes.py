@@ -1,28 +1,13 @@
 from flask import Blueprint, request, jsonify, render_template
+from flask_login import current_user
 from models import Mensagem 
-from database import db    
+from database import db
+from auth_utils import login_required_api
 
 chat_bp = Blueprint('chat_bp', __name__)
 
-ROOMS = [
-    {
-        'id': 1,
-        'name': 'Matemática Básica',
-        'type': 'public',
-        'password': '',
-        'objective': 'Revisão de soma, subtração e tabuada',
-        'created_by': 'Admin'
-    },
-    {
-        'id': 2,
-        'name': 'Física Quântica Avançada',
-        'type': 'private',
-        'password': '123',
-        'objective': 'Discutir a teoria das cordas',
-        'created_by': 'Sheldon'
-    }
-]
-next_room_id = 3
+ROOMS = []
+next_room_id = 1
 
 # --- ROTAS DE TELA (HTML) ---
 
@@ -38,11 +23,13 @@ def create_room_page():
 
 
 @chat_bp.route('/api/rooms', methods=['GET'])
+@login_required_api
 def get_rooms():
     return jsonify(ROOMS)
 
 # Cria uma nova sala
 @chat_bp.route('/api/rooms', methods=['POST'])
+@login_required_api
 def create_room():
     global next_room_id
     global ROOMS
@@ -107,11 +94,12 @@ def chat_page(room_id):
 
 
 @chat_bp.route('/api/chat/<int:room_id>/messages', methods=['POST'])
+@login_required_api
 def send_message(room_id):
     data = request.get_json()
     text = data.get('text')
-    # Pega o usuário enviado pelo JS, ou usa Anônimo se falhar
-    username = data.get('user', 'Usuário Anônimo') 
+    # Usa o nome do usuário autenticado da sessão
+    username = current_user.nome_usuario
     
     if not text:
         return jsonify({'error': 'Mensagem vazia'}), 400
@@ -129,6 +117,7 @@ def send_message(room_id):
 
 # Ler mensagens da sala
 @chat_bp.route('/api/chat/<int:room_id>/messages', methods=['GET'])
+@login_required_api
 def get_messages(room_id):
     # Busca no Banco de Dados filtrando pela sala
     messages_db = Mensagem.query.filter_by(room_id=room_id).order_by(Mensagem.timestamp).all()
