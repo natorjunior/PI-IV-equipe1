@@ -1,0 +1,4 @@
+# Content Security Policy para evitar Mixed Content quando servindo assets diretamente
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "upgrade-insecure-requests;"
+</IfModule>
