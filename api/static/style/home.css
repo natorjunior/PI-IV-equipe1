@@ -610,3 +610,375 @@ body.dark-mode .youtube-link-subtle:hover {
 body.dark-mode .text-link {
     color: #58a6ff;
 }
+
+/* ========================================
+   RESPONSIVIDADE MOBILE
+   ======================================== */
+
+/* Tablets e dispositivos médios (max 768px) */
+@media screen and (max-width: 768px) {
+    /* Navbar */
+    .navbar {
+        padding: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .logo {
+        position: relative;
+        left: 0;
+        transform: none;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+    
+    .navbar nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .navbar nav a {
+        margin: 0 8px;
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+    
+    .navbar nav a i {
+        font-size: 14px;
+    }
+    
+    /* Container principal */
+    .container {
+        max-width: 100%;
+        padding: 0 10px;
+        margin: 15px auto;
+    }
+    
+    /* Área de criação de post */
+    .criar-secao-conteudo {
+        padding: 15px;
+    }
+    
+    .criar-post textarea {
+        min-height: 60px;
+        font-size: 14px;
+    }
+    
+    /* Botões */
+    .btn-post, .btn-imagem {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    /* Posts */
+    .postagem {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .avatar {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .info-usuario strong {
+        font-size: 14px;
+    }
+    
+    .info-usuario .tempo {
+        font-size: 11px;
+    }
+    
+    .conteudo-post p {
+        font-size: 14px;
+    }
+    
+    .acoes-post {
+        flex-wrap: wrap;
+    }
+    
+    .btn-acao {
+        font-size: 13px;
+        padding: 4px 8px;
+    }
+    
+    /* Preview do YouTube */
+    .youtube-preview-subtle {
+        margin: 10px 0;
+    }
+    
+    .youtube-link-subtle {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    /* Feed */
+    .feed h2 {
+        font-size: 18px;
+    }
+}
+
+/* Smartphones (max 480px) */
+@media screen and (max-width: 480px) {
+    /* Navbar compacta */
+    .navbar {
+        padding: 8px;
+    }
+    
+    .logo {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+    
+    .navbar nav {
+        font-size: 12px;
+    }
+    
+    .navbar nav a {
+        margin: 0 5px;
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+    
+    .navbar nav div {
+        margin-left: 10px !important;
+    }
+    
+    .nome-usuario-display {
+        display: none; /* Oculta nome em telas muito pequenas */
+    }
+    
+    /* Container */
+    .container {
+        padding: 0 8px;
+        margin: 10px auto;
+        gap: 15px;
+    }
+    
+    /* Criação de post */
+    .criar-secao-conteudo {
+        padding: 12px;
+    }
+    
+    .criar-post .acoes {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .btn-post, .btn-imagem {
+        padding: 6px 12px;
+        font-size: 13px;
+        flex: 1;
+        min-width: 100px;
+    }
+    
+    /* Posts */
+    .postagem {
+        padding: 10px;
+    }
+    
+    .cabecalho-post {
+        margin-bottom: 8px;
+    }
+    
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .info-usuario strong {
+        font-size: 13px;
+    }
+    
+    .conteudo-post p {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+    
+    .conteudo-post img {
+        max-height: 300px;
+    }
+    
+    .btn-excluir {
+        font-size: 14px;
+        padding: 4px;
+    }
+    
+    /* Feed */
+    .feed h2 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+}
+
+/* ========================================
+   RESPONSIVIDADE SALAS E CHAT
+   ======================================== */
+
+/* Tablets e dispositivos médios */
+@media screen and (max-width: 768px) {
+    /* Cabeçalho de salas */
+    main .container > div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 15px;
+        align-items: stretch !important;
+    }
+    
+    main .container h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+    
+    /* Botão Nova Sala */
+    main .container a.btn-post {
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+    
+    /* Cards de salas */
+    #lista-salas .postagem {
+        padding: 15px;
+    }
+    
+    /* Chat container */
+    .chat-container {
+        height: calc(100vh - 120px) !important;
+        margin: 0;
+        border-radius: 0 !important;
+    }
+    
+    .chat-header {
+        padding: 12px;
+        border-radius: 0 !important;
+    }
+    
+    .chat-header a {
+        display: inline-block;
+        margin-right: 8px;
+    }
+    
+    .chat-header strong {
+        font-size: 14px;
+    }
+    
+    .chat-header small {
+        font-size: 11px;
+    }
+    
+    .chat-messages {
+        padding: 15px 10px;
+    }
+    
+    .msg-bubble {
+        max-width: 85%;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+    
+    .chat-input-area {
+        padding: 12px;
+        gap: 8px;
+    }
+    
+    .chat-input-area input {
+        font-size: 14px;
+        padding: 8px 12px !important;
+    }
+    
+    .chat-input-area button {
+        width: 38px !important;
+        height: 38px !important;
+    }
+}
+
+/* Smartphones */
+@media screen and (max-width: 480px) {
+    /* Ajustes específicos para telas muito pequenas */
+    .chat-container {
+        height: calc(100vh - 100px) !important;
+    }
+    
+    .chat-header {
+        padding: 10px;
+    }
+    
+    .chat-header strong {
+        font-size: 13px;
+    }
+    
+    .chat-header small {
+        font-size: 10px;
+        display: block;
+        margin-top: 3px;
+    }
+    
+    .chat-messages {
+        padding: 10px 8px;
+    }
+    
+    .msg-bubble {
+        max-width: 90%;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+    
+    .msg-bubble strong {
+        font-size: 12px;
+    }
+    
+    .chat-input-area {
+        padding: 10px;
+        gap: 6px;
+    }
+    
+    .chat-input-area input {
+        font-size: 13px;
+        padding: 6px 10px !important;
+    }
+    
+    .chat-input-area button {
+        width: 35px !important;
+        height: 35px !important;
+        font-size: 14px;
+    }
+    
+    /* Lista de salas compacta */
+    #lista-salas .postagem h3 {
+        font-size: 16px;
+    }
+    
+    #lista-salas .postagem p {
+        font-size: 13px;
+    }
+}
+
+/* Landscape mobile - ajustes para orientação horizontal */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .navbar {
+        padding: 5px;
+    }
+    
+    .logo {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    
+    .chat-container {
+        height: calc(100vh - 80px) !important;
+    }
+    
+    .chat-header {
+        padding: 8px;
+    }
+    
+    .chat-messages {
+        padding: 10px;
+    }
+    
+    .chat-input-area {
+        padding: 8px;
+    }
+}
