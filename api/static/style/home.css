@@ -343,3 +343,270 @@ body.dark-mode .info-usuario strong {
 body.dark-mode textarea::placeholder {
     color: #bbbbbb;
 }
+/* --- PREVIEWS DE LINKS --- */
+
+/* Container geral dos previews */
+.link-preview {
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid #e1e4e8;
+    background-color: #f6f8fa;
+    transition: all 0.3s ease;
+}
+
+.link-preview:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Cabeçalho do preview */
+.preview-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #586069;
+}
+
+.preview-header i {
+    font-size: 20px;
+}
+
+/* YouTube */
+.youtube-preview {
+    border-color: #ff0000;
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
+}
+
+.youtube-preview .preview-header {
+    color: #ff0000;
+}
+
+.youtube-preview .preview-header i {
+    color: #ff0000;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+/* Instagram */
+.instagram-preview {
+    border-color: #e1306c;
+    background: linear-gradient(135deg, #fff5f9 0%, #ffe5f0 100%);
+}
+
+.instagram-preview .preview-header {
+    color: #e1306c;
+}
+
+.instagram-preview .preview-header i {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Telegram */
+.telegram-preview {
+    border-color: #0088cc;
+    background: linear-gradient(135deg, #f0f8ff 0%, #e5f3ff 100%);
+}
+
+.telegram-preview .preview-header {
+    color: #0088cc;
+}
+
+.telegram-preview .preview-header i {
+    color: #0088cc;
+}
+
+/* URL clicável dentro dos previews */
+.link-url {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #0366d6;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background-color: rgba(3, 102, 214, 0.1);
+    transition: all 0.2s ease;
+    word-break: break-all;
+}
+
+.link-url:hover {
+    background-color: rgba(3, 102, 214, 0.2);
+    text-decoration: underline;
+}
+
+.link-url i {
+    font-size: 12px;
+}
+
+/* Link genérico */
+.generic-link {
+    color: #0366d6;
+    text-decoration: none;
+    font-weight: 500;
+    word-break: break-all;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: rgba(3, 102, 214, 0.08);
+    transition: all 0.2s ease;
+}
+
+.generic-link:hover {
+    background-color: rgba(3, 102, 214, 0.15);
+    text-decoration: underline;
+}
+
+/* Dark mode para previews */
+body.dark-mode .link-preview {
+    background-color: #2d2d2d;
+    border-color: #444;
+}
+
+body.dark-mode .youtube-preview {
+    background: linear-gradient(135deg, #2d1a1a 0%, #3d2020 100%);
+    border-color: #ff0000;
+}
+
+body.dark-mode .instagram-preview {
+    background: linear-gradient(135deg, #2d1a25 0%, #3d2030 100%);
+    border-color: #e1306c;
+}
+
+body.dark-mode .telegram-preview {
+    background: linear-gradient(135deg, #1a2633 0%, #20303d 100%);
+    border-color: #0088cc;
+}
+
+body.dark-mode .preview-header {
+    color: #e0e0e0;
+}
+
+body.dark-mode .link-url {
+    color: #58a6ff;
+    background-color: rgba(88, 166, 255, 0.15);
+}
+
+body.dark-mode .link-url:hover {
+    background-color: rgba(88, 166, 255, 0.25);
+}
+
+body.dark-mode .generic-link {
+    color: #58a6ff;
+    background-color: rgba(88, 166, 255, 0.12);
+}
+
+body.dark-mode .generic-link:hover {
+    background-color: rgba(88, 166, 255, 0.2);
+}
+
+/* --- PREVIEW SUTIL DO YOUTUBE --- */
+
+.youtube-preview-subtle {
+    margin: 12px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e1e4e8;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.youtube-preview-subtle:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.youtube-preview-subtle .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.youtube-preview-subtle .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.youtube-link-subtle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    color: #606770;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: #ffffff;
+    border-top: 1px solid #e1e4e8;
+    transition: all 0.2s ease;
+}
+
+.youtube-link-subtle i {
+    color: #ff0000;
+    font-size: 16px;
+}
+
+.youtube-link-subtle:hover {
+    background-color: #f6f8fa;
+    color: #1c1e21;
+}
+
+/* Links clicáveis no texto */
+.text-link {
+    color: #1877f2;
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.text-link:hover {
+    text-decoration: underline;
+}
+
+/* Dark mode para preview sutil do YouTube */
+body.dark-mode .youtube-preview-subtle {
+    background-color: #2d2d2d;
+    border-color: #444;
+}
+
+body.dark-mode .youtube-link-subtle {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-top-color: #444;
+}
+
+body.dark-mode .youtube-link-subtle:hover {
+    background-color: #2d2d2d;
+    color: #ffffff;
+}
+
+body.dark-mode .text-link {
+    color: #58a6ff;
+}
