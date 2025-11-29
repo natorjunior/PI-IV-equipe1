@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salas - Mentor.io</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <a href="/home" class="logo">Mentor.io</a>
+        
+        <nav>
+            <a href="/home"><i class="fas fa-home"></i> Home</a> 
+            <a href="/salas"><i class="fas fa-users"></i> Salas</a>
+            
+            <div style="display: inline-block; margin-left: 20px;">
+                <span class="nome-usuario-display" style="font-weight: bold; margin-right: 10px;"></span>
+                
+                <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size: 18px;" title="Mudar Tema">
+                    🌓
+                </button>
+                
+                <button onclick="localStorage.clear(); window.location.href='/';" style="background:none; border:none; cursor:pointer; font-size: 18px; color: red;" title="Sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <script>
+        // 1. Carregar Nome
+        document.addEventListener("DOMContentLoaded", () => {
+            const nome = localStorage.getItem("nome_usuario") || "Usuário";
+            const displays = document.querySelectorAll(".nome-usuario-display");
+            displays.forEach(el => el.textContent = nome);
+
+            // 2. Aplicar Tema salvo ao carregar a página
+            const temaSalvo = localStorage.getItem("theme");
+            if (temaSalvo === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        });
+
+        // 3. Função para alternar tema (disponível globalmente)
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+        }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const nome = localStorage.getItem("nome_usuario") || "Usuário";
+            const displays = document.querySelectorAll(".nome-usuario-display");
+            displays.forEach(el => el.textContent = nome);
+        });
+    </script>
+
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Salas de Estudo Disponíveis</h2>
+            <a href="/salas/criar" class="btn-post" style="text-decoration: none; padding: 10px 20px;">+ Nova Sala</a>
+        </div>
+
+        <section id="lista-salas" class="feed">
+            </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script/salas.js') }}"></script>
+</body>
+</html>

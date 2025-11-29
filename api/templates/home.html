@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Mentor.io</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="/home" class="logo">Mentor.io</a>
+        
+        <nav>
+            <a href="/home"><i class="fas fa-home"></i> Home</a> 
+            <a href="/salas"><i class="fas fa-users"></i> Salas</a>
+            
+            <div style="display: inline-block; margin-left: 20px;">
+                <span class="nome-usuario-display" style="font-weight: bold; margin-right: 10px;"></span>
+                
+                <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size: 18px;" title="Mudar Tema">
+                    🌓
+                </button>
+                
+                <button onclick="logout()" style="background:none; border:none; cursor:pointer; font-size: 18px; color: red;" title="Sair">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="criar-secao-conteudo">   
+            <div class="criar-post">
+                <textarea placeholder="O que está acontecendo?"></textarea>
+                <div class="acoes">
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                    <button class="btn-imagem" onclick="document.getElementById('image-input').click()">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button class="btn-post"><i class="fas fa-feather-alt"></i> Postar</button> 
+                </div>
+                <div id="image-preview" style="margin-top: 10px;"></div>
+            </div>
+        </section>
+
+        <section class="feed">
+            <h2>Feed de Postagens</h2>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='script/link-config.js') }}"></script>
+    <script src="{{ url_for('static', filename='script/home.js') }}"></script>
+</body>
+</html>

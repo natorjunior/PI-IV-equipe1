@@ -27,6 +27,21 @@ services:
       timeout: 2s
       retries: 20
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: mentor-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=mysql
+      #- PMA_USER=root
+      #- PMA_PASSWORD=admin
+      - PMA_ARBITRARY=1
+      - TZ=America/Fortaleza
+    ports:
+      - "1540:80"
+    depends_on:
+      - mysql
+
   backend:
     build:
       context: ./api
@@ -42,6 +57,7 @@ services:
       DATABASE_USER: app_user
       DATABASE_PASSWORD: app_pass
       DATABASE_NAME: app_db
+      TZ: America/Fortaleza
     depends_on:
       mysql:
         condition: service_healthy
@@ -49,7 +65,7 @@ services:
       - ./api:/app
     # Aguarda até que o MySQL aceite conexões antes de iniciar o backend.
     # Usa um pequeno loop Python (disponível na imagem base) para checar a porta 3306.
-    command: ["sh", "-c", "python -c \"import socket, time\nwhile True:\n try:\n  s=socket.create_connection(('mysql',3306),2); s.close(); break\n except Exception:\n  time.sleep(1)\n\" && exec gunicorn -w 2 -b 0.0.0.0:5000 app:app"]
+    command: ["sh", "-c", "python -c \"import socket, time\nwhile True:\n try:\n  s=socket.create_connection(('mysql',3306),2); s.close(); break\n except Exception:\n  time.sleep(1)\n\" && exec gunicorn -w 1 -b 0.0.0.0:5000 app:app"]
 
 
 volumes:

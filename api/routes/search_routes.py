@@ -1,14 +1,22 @@
 from flask import Blueprint, request, jsonify
 from models import Usuario, Postagem
+from auth_utils import login_required_api
 
 search_bp = Blueprint('search', __name__)
 
 @search_bp.route("/buscar", methods=["GET"])
+@login_required_api
 def buscar():
     termo = request.args.get("q", "")
     usuarios = Usuario.query.filter(Usuario.nome_usuario.contains(termo)).all()
     postagens = Postagem.query.filter(Postagem.conteudo.contains(termo)).all()
     return jsonify({
         "usuarios": [u.nome_usuario for u in usuarios],
-        "postagens": [p.conteudo for p in postagens]
+        "postagens": [{
+            "id": p.id,
+            "conteudo": p.conteudo,
+            "imagem_url": p.imagem_url,
+            "curtidas": p.curtidas,
+            "usuario_id": p.usuario_id
+        } for p in postagens]
     })

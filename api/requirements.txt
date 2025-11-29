@@ -1,11 +1,8 @@
-flask>=3.0
-gunicorn>=20.0
-pymysql>=1.0
-flask-cors>=4.0
-flask-sqlalchemy>=3.0
 flask
-flask_sqlalchemy
-flask_cors
+flask-cors
+flask-sqlalchemy
+flask-login
+flask-session
 pymysql
 werkzeug
-cryptography>=38.0
+gunicorn

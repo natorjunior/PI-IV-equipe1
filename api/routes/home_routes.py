@@ -1,14 +1,24 @@
 from flask import Blueprint, jsonify
+from flask_login import current_user
 from models import Usuario
+from auth_utils import login_required_api
 
 home_bp = Blueprint("home", __name__)
 
 # API home (mapeada sob /api/home para evitar conflito com rota estática /home)
 @home_bp.route("/api/home", methods=["GET"])
+@login_required_api
 def home():
-    return jsonify({"message": "Bem-vindo à página inicial do Mentor.io!"})
+    return jsonify({
+        "message": f"Bem-vindo à página inicial do Mentor.io, {current_user.nome_usuario}!",
+        "usuario": {
+            "id": current_user.id,
+            "nome_usuario": current_user.nome_usuario
+        }
+    })
 
 @home_bp.route("/api/perfil/<int:usuario_id>", methods=["GET"])
+@login_required_api
 def perfil(usuario_id):
     usuario = Usuario.query.get(usuario_id)
     if not usuario:
