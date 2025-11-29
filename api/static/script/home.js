@@ -69,9 +69,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const jaCurti = postData.liked_by && postData.liked_by.includes(currentUserName);
         
-        const imageHtml = postData.image_url 
+        const hasImage = postData.image_url && postData.image_url.trim() !== '';
+        const imageHtml = hasImage 
             ? `<img src="${postData.image_url}" alt="Imagem do post" loading="lazy">` 
             : '';
+        
+        // Processa o conteúdo para detectar links do YouTube (apenas se não houver imagem)
+        const processedContent = processContentWithYouTube(postData.content, hasImage);
+        
+        // Torna outros links clicáveis no texto
+        const contentWithLinks = makeLinksClickable(processedContent.text);
 
         post.innerHTML = `
             <div class="cabecalho-post">
@@ -83,7 +90,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ${postData.can_delete ? `<button class="btn-excluir" title="Excluir Post"><i class="fas fa-trash-alt"></i></button>` : ''}
             </div>
             <div class="conteudo-post">
-                <p>${postData.content}</p>
+                ${contentWithLinks ? `<p>${contentWithLinks}</p>` : ''}
+                ${processedContent.preview}
                 ${imageHtml}
             </div>
             <div class="acoes-post">
