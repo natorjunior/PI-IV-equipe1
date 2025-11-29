@@ -15,7 +15,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # --- ROTA GET: Pega todos os posts ---
-@post_bp.route('/', methods=['GET'])
+# @post_bp.route('/', methods=['GET'])
 @post_bp.route('', methods=['GET'], strict_slashes=False)
 @login_required_api
 def get_posts():

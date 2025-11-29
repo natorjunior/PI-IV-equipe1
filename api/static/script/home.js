@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.body.classList.add("dark-mode");
     }
 
-    const API_URL = '/api/posts/'; 
+    const API_URL = '/api/posts'; 
 
     // --- 3. FUNÇÃO PARA CRIAR O HTML DO POST ---
     function createPostElement(postData, currentUserName) {
