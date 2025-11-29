@@ -27,6 +27,21 @@ services:
       timeout: 2s
       retries: 20
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: mentor-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=mysql
+      #- PMA_USER=root
+      #- PMA_PASSWORD=admin
+      - PMA_ARBITRARY=1
+      - TZ=America/Fortaleza
+    ports:
+      - "1540:80"
+    depends_on:
+      - mysql
+
   backend:
     build:
       context: ./api
@@ -42,6 +57,7 @@ services:
       DATABASE_USER: app_user
       DATABASE_PASSWORD: app_pass
       DATABASE_NAME: app_db
+      TZ: America/Fortaleza
     depends_on:
       mysql:
         condition: service_healthy

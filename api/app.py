@@ -42,21 +42,24 @@ CORS(app, supports_credentials=True, origins=[
 ])
 
 
-db_uri = 'sqlite:///mentor.db'
-
+# Configuração do banco de dados MySQL
 env_db_url = os.environ.get('DATABASE_URL')
-env_db_host = os.environ.get('DB_HOST')
+env_db_host = os.environ.get('DATABASE_HOST') or os.environ.get('DB_HOST')
 
 if env_db_url:
     db_uri = env_db_url
 elif env_db_host:
-    user = os.environ.get('DB_USER', 'root')
-    password = os.environ.get('DB_PASS', 'password')
-    port = os.environ.get('DB_PORT', '3306')
-    name = os.environ.get('DB_NAME', 'mentor')
+    user = os.environ.get('DATABASE_USER') or os.environ.get('DB_USER', 'root')
+    password = os.environ.get('DATABASE_PASSWORD') or os.environ.get('DB_PASS', 'password')
+    port = os.environ.get('DATABASE_PORT') or os.environ.get('DB_PORT', '3306')
+    name = os.environ.get('DATABASE_NAME') or os.environ.get('DB_NAME', 'mentor')
     
     db_uri = f'mysql+pymysql://{user}:{password}@{env_db_host}:{port}/{name}'
-    print(f"Ambiente Docker detectado. Usando MySQL em: {env_db_host}")
+    print(f"Usando MySQL em: {env_db_host}:{port}/{name}")
+else:
+    # Fallback para desenvolvimento local com MySQL
+    db_uri = 'mysql+pymysql://root:root123@localhost:3306/mentor'
+    print("Usando MySQL local (localhost:3306/mentor)")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

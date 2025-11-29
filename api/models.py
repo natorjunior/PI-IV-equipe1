@@ -1,6 +1,9 @@
 from database import db
-from datetime import datetime, timedelta # <--- ADICIONADO: timedelta
+from datetime import datetime, timedelta, timezone
 from flask_login import UserMixin
+
+# Fuso horário de Fortaleza (UTC-3)
+FORTALEZA_TZ = timezone(timedelta(hours=-3))
 
 # Tabela de associação
 tabela_curtidas = db.Table('curtidas_assoc',
@@ -28,7 +31,7 @@ class Postagem(db.Model):
     conteudo = db.Column(db.Text, nullable=False)
     imagem_url = db.Column(db.String(500), nullable=True)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    criado_em = db.Column(db.DateTime, default=datetime.utcnow)
+    criado_em = db.Column(db.DateTime, default=lambda: datetime.now(FORTALEZA_TZ))
     
     curtidas = db.Column(db.Integer, default=0)
 
@@ -48,17 +51,13 @@ class Mensagem(db.Model):
     room_id = db.Column(db.Integer, nullable=False)
     user = db.Column(db.String(100), nullable=False)
     text = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=lambda: datetime.now(FORTALEZA_TZ))
 
     def to_dict(self):
-        # --- CORREÇÃO DE HORÁRIO ---
-        # Pega o horário salvo (UTC) e diminui 3 horas para ficar horário do Brasil
-        horario_brasil = self.timestamp - timedelta(hours=3)
-        
         return {
             'id': self.id,
             'room_id': self.room_id,
             'user': self.user,
             'text': self.text,
-            'time': horario_brasil.strftime('%H:%M') # Usa o horário ajustado
+            'time': self.timestamp.strftime('%H:%M')
         }

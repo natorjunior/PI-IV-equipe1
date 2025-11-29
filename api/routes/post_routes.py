@@ -25,7 +25,7 @@ def get_posts():
     for p in posts_db:
         autor_nome = p.autor.nome_usuario if p.autor else "Desconhecido"
         
-        # Verifica se o post tem data, senão põe string vazia
+        # Formata a data no horário de Fortaleza
         data_formatada = p.criado_em.strftime("%d/%m %H:%M") if p.criado_em else ""
 
         posts_list.append({
