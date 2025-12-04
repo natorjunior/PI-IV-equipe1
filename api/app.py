@@ -10,8 +10,14 @@ from routes.home_routes import home_bp
 from routes.chat_routes import chat_bp
 from routes.post_routes import post_bp
 from routes.search_routes import search_bp
+import time
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
+
+# Adiciona filtro para cache busting
+@app.context_processor
+def inject_cache_bust():
+    return dict(cache_bust=int(time.time()))
 
 # Configuração de segurança
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
