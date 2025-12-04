@@ -28,6 +28,8 @@
             padding: 20px;
             overflow-y: auto;
             background-color: #e5ddd5; /* Cor estilo WhatsApp */
+            display: flex;
+            flex-direction: column;
         }
         .chat-input-area {
             padding: 15px;
@@ -36,12 +38,96 @@
             gap: 10px;
         }
         .msg-bubble {
-            background: white;
             padding: 10px 15px;
             border-radius: 8px;
             margin-bottom: 10px;
             max-width: 70%;
             box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            word-wrap: break-word;
+            display: block;
+        }
+        
+        /* Mensagens do usuário atual - lado direito, cor verde */
+        .msg-bubble.own-message {
+            background-color: #E8F5E9 !important;
+            color: #000 !important;
+            align-self: flex-end !important;
+            border-bottom-right-radius: 4px !important;
+            margin-left: auto !important;
+        }
+        
+        /* Mensagens de outros usuários - lado esquerdo, cor branca */
+        .msg-bubble.other-message {
+            background-color: #F5F5F5 !important;
+            color: #000 !important;
+            align-self: flex-start !important;
+            border-bottom-left-radius: 4px !important;
+            margin-right: auto !important;
+        }
+        
+        .msg-user {
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #333;
+        }
+        
+        .msg-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        
+        .msg-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.7em;
+            flex-shrink: 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+        
+        .msg-content {
+            display: block;
+            margin-bottom: 5px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        
+        .msg-time {
+            font-size: 0.75em;
+            color: #888;
+            display: block;
+            text-align: right;
+        }
+        
+        /* Dark Mode - Ajustes para mensagens */
+        body.dark-mode .msg-bubble.own-message {
+            background: #1B5E20 !important;
+            color: #e1e8ed !important;
+        }
+        
+        body.dark-mode .msg-bubble.other-message {
+            background: #303030 !important;
+            color: #e1e8ed !important;
+        }
+        
+        body.dark-mode .msg-time {
+            color: #999;
+        }
+        
+        /* Avatar permanece com as cores definidas */
+        .msg-avatar {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        body.dark-mode .msg-header {
+            color: #e1e8ed;
         }
     </style>
 </head>

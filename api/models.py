@@ -48,7 +48,7 @@ class Postagem(db.Model):
 class Mensagem(db.Model):
     __tablename__ = 'mensagens'
     id = db.Column(db.Integer, primary_key=True)
-    room_id = db.Column(db.Integer, nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey('salas.id'), nullable=False)
     user = db.Column(db.String(100), nullable=False)
     text = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=lambda: datetime.now(FORTALEZA_TZ))
@@ -61,3 +61,27 @@ class Mensagem(db.Model):
             'text': self.text,
             'time': self.timestamp.strftime('%H:%M')
         }
+
+class Sala(db.Model):
+    __tablename__ = 'salas'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    objective = db.Column(db.Text, nullable=False)
+    type = db.Column(db.String(10), nullable=False)  # 'public' ou 'private'
+    password = db.Column(db.String(100), nullable=True)
+    created_by = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(FORTALEZA_TZ))
+    mensagens = db.relationship('Mensagem', backref='sala', lazy=True, cascade='all, delete-orphan')
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'objective': self.objective,
+            'type': self.type,
+            'created_by': self.created_by,
+            'created_at': self.created_at.strftime('%d/%m/%Y %H:%M')
+        }
+    
+    def __repr__(self):
+        return f"<Sala {self.name}>"

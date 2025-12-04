@@ -101,8 +101,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <span class="tempo">Objetivo: ${room.objective}</span>
                         </div>
                     </div>
-                    <div class="acoes-post" style="justify-content: flex-end;">
+                    <div class="acoes-post" style="justify-content: space-between;">
                         <button class="btn-post" onclick="tentarEntrar(${room.id}, '${room.type}')">${btnText}</button>
+                        <button class="btn-excluir" onclick="excluirSala(${room.id})" title="Excluir Sala"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 `;
                 listaSalas.appendChild(div);
@@ -145,5 +146,37 @@ async function tentarEntrar(id, type) {
         }
     } catch (error) {
         alert('Erro de conexão');
+    }
+}
+
+// Função global para excluir uma sala
+async function excluirSala(id) {
+    if (!confirm('Tem certeza que deseja excluir esta sala? Todas as mensagens serão perdidas.')) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/rooms/${id}`, {
+            method: 'DELETE',
+            credentials: 'include' // Envia cookies de sessão
+        });
+
+        if (res.status === 401) {
+            alert("Sessão expirada. Faça login novamente.");
+            window.location.href = "/";
+            return;
+        }
+
+        if (res.ok) {
+            alert('Sala excluída com sucesso!');
+            // Recarrega a lista de salas
+            location.reload();
+        } else {
+            const data = await res.json();
+            alert('Erro ao excluir sala: ' + (data.error || 'Erro desconhecido'));
+        }
+    } catch (error) {
+        console.error('Erro de conexão:', error);
+        alert('Erro ao conectar com o servidor');
     }
 }
